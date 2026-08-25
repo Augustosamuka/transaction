@@ -1,9 +1,8 @@
 
-import { create } from '../../controllers/transaction/transaction.controller.js'
+import { create } from "../../controllers/transaction/transation.controller.js"
 
 async function TransactionRoutes(app) {
  
-    app.post('/transaction', create)
     
 }
 

@@ -4,7 +4,6 @@ import Plugins from '../src/plugins/plugins.js';
 
 const app = fastify()
 
-
 app.register(Plugins)
 
 const init = async () => {
