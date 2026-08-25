@@ -5,9 +5,10 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "dev": "node --watch --no-warnings ."
+    "dev": "node --env-file=.env --watch --no-warnings ."
   },
   "dependencies": {
-    "fastify": "^5.12.1"
+    "fastify": "^5.12.1",
+    "mysql2": "^3.24.2"
   }
 }
