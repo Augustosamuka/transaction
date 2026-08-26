@@ -1,25 +1,72 @@
 
-import createAccount from "../../services/account/account.services.js"
+import accountServices from "../../services/account/account.services.js"
 
-const account = new createAccount()
+import jwt from 'jsonwebtoken'
+
+const account = new accountServices()
 
 export async function create(request, reply) {
     try {
         
         const { name, email, password } = request.body
-
         if (!name || !email || !password) {
             return reply.status(422).send()
         }
 
-        await account.create({
+        const createAccount = await account.create({
             name,
             email,
             password
         })
 
+        if (!createAccount) {
+            return reply.status(422).send()
+        }
+
         reply.status(200).send()
     } catch (err) {
         reply.status(404).send()
+    }
+}
+
+export async function login(request, reply) {
+    try {
+        
+        const { email, password } = request.body
+        if (!email || !password) {
+            return reply.status(422).send()
+        }
+
+        const token = await account.login({
+            email,
+            password
+        })
+
+        if (!token) {
+            return reply.status(422).send()
+        }
+
+        reply.status(200).send(token)
+    } catch (err) {
+        reply.status(401).send()
+    }
+}
+
+export async function teste(request, reply) {
+
+}
+
+export async function authenticate(request, reply) {
+    try {
+
+        const token = request.headers.authorization
+        if (!token) {
+            return reply.status(422).send()
+        }
+
+        const decodeJwt = jwt.verify(token, process.env.SECRETKEY)
+        request.user = decodeJwt
+    } catch (err) {
+        reply.status(401).send()
     }
 }
