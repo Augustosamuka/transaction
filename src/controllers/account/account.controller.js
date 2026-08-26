@@ -1,8 +1,6 @@
 
 import accountServices from "../../services/account/account.services.js"
 
-import jwt from 'jsonwebtoken'
-
 const account = new accountServices()
 
 export async function create(request, reply) {
@@ -47,25 +45,6 @@ export async function login(request, reply) {
         }
 
         reply.status(200).send(token)
-    } catch (err) {
-        reply.status(401).send()
-    }
-}
-
-export async function teste(request, reply) {
-
-}
-
-export async function authenticate(request, reply) {
-    try {
-
-        const token = request.headers.authorization
-        if (!token) {
-            return reply.status(422).send()
-        }
-
-        const decodeJwt = jwt.verify(token, process.env.SECRETKEY)
-        request.user = decodeJwt
     } catch (err) {
         reply.status(401).send()
     }

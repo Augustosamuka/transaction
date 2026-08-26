@@ -1,34 +1,31 @@
 
-import db from '../../database/db.connection.js'
+import accountDatabase from '../../database/account/account.db.js';
 
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
+const db = new accountDatabase()
+
 class accountServices {
 
     async create ({name, email, password}) {
-        const [rows] = await db.query(
-            'SELECT email FROM accounts WHERE email =?', email
-        )
-
-        if (rows[0]) {
+        const verifyEmail = await db.verifyEmail(email)
+        if (!verifyEmail) {
             return false;
         }
 
         const hashPassword = await bcrypt.hash(password, 10)
-        await db.query(
-            'INSERT INTO accounts (name, email, password) VALUES(?, ?, ?)', [name, email, hashPassword]
-        )
+        
+        const insertAccount = await db.insertAccount({ name, email, hashPassword})
+        if (!insertAccount) {
+            return false;
+        }
 
         return true;
     }
     
     async login ({email, password}) {
-        const [result] = await db.query(
-            'SELECT * FROM accounts WHERE email =?', email
-        )
-
-        const user = result[0]
+        const user = await db.getAccountByEmail(email)
         if (!user) {
             return false;
         }
@@ -39,7 +36,7 @@ class accountServices {
         }
 
         const token = jwt.sign({ id: user.id, name: user.name, email: user.email }, process.env.SECRETKEY, { 
-            expiresIn: '1m' 
+            expiresIn: '1h' 
         })
 
         if (!token) {
