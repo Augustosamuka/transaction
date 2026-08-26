@@ -7,6 +7,10 @@ class transactionServices {
 
     async transactionPost ({ id, value }) {
 
+        if (!id || !value) {
+            return false;
+        }
+
         const valueAccount = await db.getValueFromAccount(id)
         if (!valueAccount) {
             return false;
@@ -16,11 +20,24 @@ class transactionServices {
             return false;
         }
 
-        const insetTransaction = db.insetTransaction({ id, value, valueAccount })
+        const insetTransaction = await db.insetTransaction({ id, value, valueAccount })
         if (!insetTransaction) {
             return false;
         }
 
+        return true;
+    }
+
+    async transactionDelete ({ id }) {
+        if (!id) {
+            return false;
+        }
+
+        const deleteTransactions = await db.deleteTransactions(id)
+        if (!deleteTransactions) {
+            return false;
+        }
+        
         return true;
     }
 

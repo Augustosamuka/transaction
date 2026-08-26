@@ -9,6 +9,10 @@ const db = new accountDatabase()
 class accountServices {
 
     async create ({name, email, password}) {
+        if (!name || !email || !password) {
+            return false;
+        }
+
         const verifyEmail = await db.verifyEmail(email)
         if (!verifyEmail) {
             return false;
@@ -25,6 +29,10 @@ class accountServices {
     }
     
     async login ({email, password}) {
+        if (!email || !password) {
+            return false;
+        }
+
         const user = await db.getAccountByEmail(email)
         if (!user) {
             return false;

@@ -5,7 +5,6 @@ const account = new accountServices()
 
 export async function create(request, reply) {
     try {
-        
         const { name, email, password } = request.body
         if (!name || !email || !password) {
             return reply.status(422).send()
@@ -29,7 +28,6 @@ export async function create(request, reply) {
 
 export async function login(request, reply) {
     try {
-        
         const { email, password } = request.body
         if (!email || !password) {
             return reply.status(422).send()

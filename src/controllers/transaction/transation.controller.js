@@ -25,6 +25,29 @@ export async function transactionPost(request, reply) {
             return reply.status(422).send()
         }
 
+        reply.status(200).send()
+    } catch (err) {
+        reply.status(402).send()
+    }
+}
+
+export async function transactionDelete(request, reply) {
+    try {
+
+        const user = request.user
+        if (!user) {
+            return reply.status(422).send()
+        }
+
+        const deleteTransactions = await transaction.transactionDelete({
+            id: user.id
+        })
+
+        if (!deleteTransactions) {
+            return reply.status(422).send()
+        }
+
+        reply.status(200).send()
     } catch (err) {
         reply.status(402).send()
     }
