@@ -5,40 +5,51 @@ const db = new transactionDatabase()
 
 class transactionServices {
 
-    async transactionPost ({ id, value }) {
+    async transactionPost (value) {
 
-        if (!id || !value) {
-            return false;
+        if (!value) {
+            return false
         }
 
-        const valueAccount = await db.getValueFromAccount(id)
-        if (!valueAccount) {
-            return false;
-        }
-
-        if (Number(valueAccount.value) < Number(value)) {
-            return false;
-        }
-
-        const insetTransaction = await db.insetTransaction({ id, value, valueAccount })
+        const insetTransaction = await db.insetTransaction(value)
         if (!insetTransaction) {
-            return false;
+            return false
         }
 
-        return true;
+        return true
     }
 
-    async transactionDelete ({ id }) {
-        if (!id) {
-            return false;
-        }
+    async transactionDelete () {
 
-        const deleteTransactions = await db.deleteTransactions(id)
-        if (!deleteTransactions) {
-            return false;
+        const deleteTransaction = await db.deleteTransaction()
+        if (!deleteTransaction) {
+            return false
         }
         
-        return true;
+        return true
+    }
+
+    async transactionStatistics () {
+
+        const statisticsTransaction = await db.statisticsTransaction()
+        if (!statisticsTransaction) {
+            return false
+        }
+
+        const count = statisticsTransaction.length
+
+        const sum = statisticsTransaction.reduce( (accumulator, value) => {
+            const numberClean = value.value.replace('.', '')
+            return accumulator + Number(numberClean)
+        }, 0)
+
+        const avg = Math.floor((sum / count)) || 0
+
+        return {
+            count: Number(count.toLocaleString('pt-BR')),
+            sum: Number(sum.toLocaleString('pt-BR')),
+            avg: Number(avg.toLocaleString('pt-BR'))
+        }
     }
 
 }

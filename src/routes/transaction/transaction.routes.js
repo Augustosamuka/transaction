@@ -1,13 +1,10 @@
 
-import { transactionPost, transactionDelete } from "../../controllers/transaction/transation.controller.js"
-
-import authenticate from "../../index.js"
+import { transactionPost, transactionDelete, transactionGet } from "../../controllers/transaction/transation.controller.js"
 
 async function TransactionRoutes(app) {
-    
-    app.post('/transaction', { onRequest: [authenticate] }, transactionPost)
-    app.delete('/transaction/:id', { onRequest: [authenticate] }, transactionDelete)
-
+    app.post('/transaction', transactionPost)
+    app.delete('/transaction', transactionDelete)
+    app.get('/transaction', transactionGet)
 }
 
 export default TransactionRoutes
