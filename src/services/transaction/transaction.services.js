@@ -6,52 +6,46 @@ const db = new transactionDatabase()
 class transactionServices {
 
     async transactionPost (value) {
-
         if (!value) {
-            return false
+            throw new Error('Value not found')
         }
 
         const insetTransaction = await db.insetTransaction(value)
         if (!insetTransaction) {
-            return false
+            throw new Error('Error inserting into the database')
         }
-
-        return true
     }
 
     async transactionDelete () {
-
         const deleteTransaction = await db.deleteTransaction()
         if (!deleteTransaction) {
-            return false
+            throw new Error('Error deleting the transactions')
         }
-        
-        return true
     }
 
     async transactionStatistics () {
-
         const statisticsTransaction = await db.statisticsTransaction()
         if (!statisticsTransaction) {
-            return false
+            throw new Error('Error viewing statistics')
         }
 
         const count = statisticsTransaction.length
-
-        const sum = statisticsTransaction.reduce( (accumulator, value) => {
-            const numberClean = value.value.replace('.', '')
-            return accumulator + Number(numberClean)
-        }, 0)
-
+        const values = statisticsTransaction.map(item => Number(item.value))
+        
+        const sum = values.reduce((accumulator, value) => accumulator + value, 0)
         const avg = Math.floor((sum / count)) || 0
 
+        const min = Math.min(...values)
+        const max = Math.max(...values)
+
         return {
-            count: Number(count.toLocaleString('pt-BR')),
-            sum: Number(sum.toLocaleString('pt-BR')),
-            avg: Number(avg.toLocaleString('pt-BR'))
+            count: count.toLocaleString('pt-BR'),
+            sum: sum.toLocaleString('pt-BR'),
+            avg: avg.toLocaleString('pt-BR'),
+            min: min.toLocaleString('pt-BR'),
+            max: max.toLocaleString('pt-BR')
         }
     }
-
 }
 
 export default transactionServices

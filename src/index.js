@@ -11,7 +11,7 @@ const init = async () => {
         await app.listen({ port: process.env.PORT })
         console.log(`Server running http://localhost:${ process.env.PORT }`)
     } catch (err) {
-        console.log(err)
+        console.error(err)
         process.exit(1)
     }
 }

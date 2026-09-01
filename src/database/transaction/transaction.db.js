@@ -5,16 +5,16 @@ class transactionDatabase {
 
     async insetTransaction (value) {
         if (!value) {
-            return false;
+            return false
         }
 
         const date = new Date()
 
         await db.query(
-            'INSERT INTO transactions (value, date) VALUES(?, ?)', [ value.toLocaleString('pt-BR'), date ]
+            'INSERT INTO transactions (value, date) VALUES(?, ?)', [ value, date ]
         )
         
-        return true;
+        return true
     }
 
     async deleteTransaction () {
@@ -24,14 +24,14 @@ class transactionDatabase {
         )
 
         if (rows[0].total < 1) {
-            return false;
+            return false
         }
 
         await db.query(
             'DELETE FROM transactions'
         )
 
-        return true;
+        return true
     }
 
     async statisticsTransaction () {
@@ -40,7 +40,7 @@ class transactionDatabase {
             'SELECT * FROM transactions'
         )
 
-        return result;
+        return result
     }
 
 }
