@@ -43,6 +43,19 @@ class transactionDatabase {
         return result
     }
 
+    async createLogs(message) {
+        if (!message) {
+            return false
+        }
+
+        const date = new Date()
+
+        await db.query(
+            'INSERT INTO logs (message, date) VALUES(?, ?)', [ message, date ]
+        )
+        
+        return true
+    }
 }
 
 export default transactionDatabase

@@ -4,7 +4,8 @@ CREATE TABLE transactions (
   date VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE statistics (
+CREATE TABLE logs (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  data VARCHAR(255) NOT NULL
+  message VARCHAR(255) NOT NULL,
+  date VARCHAR(255) NOT NULL
 );

@@ -14,6 +14,8 @@ class transactionServices {
         if (!insetTransaction) {
             throw new Error('Error inserting into the database')
         }
+
+        await createLogs({ message: `O usuario transferiu o valor de R$ ${value.toLocaleString('pt-BR')}` })
     }
 
     async transactionDelete () {
@@ -21,6 +23,8 @@ class transactionServices {
         if (!deleteTransaction) {
             throw new Error('Error deleting the transactions')
         }
+
+        await createLogs({ message: 'O usuario deletou todas as transações' })
     }
 
     async transactionStatistics () {
@@ -37,6 +41,7 @@ class transactionServices {
         })
 
         if (latestValues.length <= 0) {
+            await createLogs({message: `O usuario consultou as estatísticas e não obteve resultado` })
             return {
                 count: '0',
                 sum: '0',
@@ -55,6 +60,8 @@ class transactionServices {
         const min = Math.min(...values)
         const max = Math.max(...values)
 
+        await createLogs({ message: `O usuario consultou as estatísticas da suas transações.` })
+
         return {
             count: count.toLocaleString('pt-BR'),
             sum: sum.toLocaleString('pt-BR'),
@@ -66,3 +73,14 @@ class transactionServices {
 }
 
 export default transactionServices
+
+async function createLogs({ message }) {
+    if (!message) {
+        return 'Error saving the log'
+    }
+
+    const insertLog = await db.createLogs(message)
+    if (!insertLog) {
+        throw new Error('Error saving the log')
+    }
+}

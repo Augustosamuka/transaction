@@ -12,7 +12,7 @@ export async function transactionPost(request, reply) {
         reply.status(201).send()
     } catch (err) {
         console.error(err)
-        reply.status(402).send()
+        reply.status(500).send()
     }
 }
 
@@ -20,10 +20,10 @@ export async function transactionDelete(request, reply) {
     try {
         await transaction.transactionDelete()
 
-        reply.status(200).send()
+        reply.status(204).send()
     } catch (err) {
         console.error(err)
-        reply.status(402).send()
+        reply.status(500).send()
     }
 }
 
@@ -34,6 +34,6 @@ export async function transactionGet(request, reply) {
         reply.status(200).send(transactionStatistics)
     } catch (err) {
         console.error(err)
-        reply.status(402).send()
+        reply.status(500).send()
     }
 }
