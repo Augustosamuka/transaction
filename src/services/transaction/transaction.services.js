@@ -29,8 +29,25 @@ class transactionServices {
             throw new Error('Error viewing statistics')
         }
 
-        const count = statisticsTransaction.length
-        const values = statisticsTransaction.map(item => Number(item.value))
+        const limitStatistics = Date.now() - 60000
+        const latestValues = statisticsTransaction.filter(item => {
+            const dataTime = new Date(item.date).getTime()
+
+            return dataTime >= limitStatistics
+        })
+
+        if (latestValues.length <= 0) {
+            return {
+                count: '0',
+                sum: '0',
+                avg: '0',
+                min: '0',
+                max: '0'
+            }
+        }
+
+        const count = latestValues.length
+        const values = latestValues.map(item => Number(item.value))
         
         const sum = values.reduce((accumulator, value) => accumulator + value, 0)
         const avg = Math.floor((sum / count)) || 0

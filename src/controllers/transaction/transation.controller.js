@@ -22,7 +22,7 @@ export async function transactionDelete(request, reply) {
 
         reply.status(200).send()
     } catch (err) {
-        console.err(err)
+        console.error(err)
         reply.status(402).send()
     }
 }
