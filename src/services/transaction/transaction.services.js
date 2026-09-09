@@ -72,9 +72,7 @@ class transactionServices {
     }
 }
 
-export default transactionServices
-
-async function createLogs({ message }) {
+export async function createLogs({ message }) {
     if (!message) {
         return 'Error saving the log'
     }
@@ -84,3 +82,5 @@ async function createLogs({ message }) {
         throw new Error('Error saving the log')
     }
 }
+
+export default transactionServices
