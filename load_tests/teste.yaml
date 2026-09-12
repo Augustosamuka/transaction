@@ -1,0 +1,17 @@
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 10
+      arrivalRate: 1000
+  variables:
+    name: "braga"
+
+scenarios:
+  - name: "Find contacts by name"
+    flow:
+      - post:
+          url: "/transaction"
+          json:
+            value: "{{ $randomNumber(10, 1000) }}"
+          expect:
+            - statusCode: 200

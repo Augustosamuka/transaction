@@ -37,7 +37,7 @@ class transactionDatabase {
     async statisticsTransaction () {
 
         const [result] = await db.query(
-            'SELECT * FROM transactions'
+            'SELECT * FROM transactions WHERE date >= NOW() - INTERVAL 60 SECOND'
         )
 
         return result

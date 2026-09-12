@@ -15,7 +15,7 @@ class transactionServices {
             throw new Error('Error inserting into the database')
         }
 
-        await createLogs({ message: `O usuario transferiu o valor de R$ ${value.toLocaleString('pt-BR')}` })
+        createLogs({ message: `O usuario transferiu o valor de R$ ${value.toLocaleString('pt-BR')}` }).catch(err => console.log('Falha ao salvara log:', err))
     }
 
     async transactionDelete () {
@@ -24,7 +24,7 @@ class transactionServices {
             throw new Error('Error deleting the transactions')
         }
 
-        await createLogs({ message: 'O usuario deletou todas as transações' })
+        createLogs({ message: 'O usuario deletou todas as transações' }).catch(err => console.log('Falha ao salvara log:', err))
     }
 
     async transactionStatistics () {
@@ -33,15 +33,8 @@ class transactionServices {
             throw new Error('Error viewing statistics')
         }
 
-        const limitStatistics = Date.now() - 60000
-        const latestValues = statisticsTransaction.filter(item => {
-            const dataTime = new Date(item.date).getTime()
-
-            return dataTime >= limitStatistics
-        })
-
-        if (latestValues.length <= 0) {
-            await createLogs({message: `O usuario consultou as estatísticas e não obteve resultado` })
+        if (statisticsTransaction.length <= 0) {
+            createLogs({message: `O usuario consultou as estatísticas e não obteve resultado` }).catch(err => console.log('Falha ao salvara log:', err))
             return {
                 count: '0',
                 sum: '0',
@@ -51,8 +44,8 @@ class transactionServices {
             }
         }
 
-        const count = latestValues.length
-        const values = latestValues.map(item => Number(item.value))
+        const count = statisticsTransaction.length
+        const values = statisticsTransaction.map(item => Number(item.value))
         
         const sum = values.reduce((accumulator, value) => accumulator + value, 0)
         const avg = Math.floor((sum / count)) || 0
@@ -60,7 +53,7 @@ class transactionServices {
         const min = Math.min(...values)
         const max = Math.max(...values)
 
-        await createLogs({ message: `O usuario consultou as estatísticas da suas transações.` })
+        createLogs({ message: `O usuario consultou as estatísticas da suas transações.` }).catch(err => console.log('Falha ao salvara log:', err))
 
         return {
             count: count.toLocaleString('pt-BR'),
