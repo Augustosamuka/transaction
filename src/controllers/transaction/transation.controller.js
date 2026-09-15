@@ -5,13 +5,13 @@ const transaction = new transactionServices()
 
 export async function transactionPost(request, reply) {
     try {
+
         const { value } = request.body
 
         await transaction.transactionPost(value)
 
         reply.status(201).send()
     } catch (err) {
-        console.error(err)
         reply.status(500).send()
     }
 }

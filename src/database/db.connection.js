@@ -6,8 +6,13 @@ const db = await mysql.createPool({
     user: process.env.DB_USER,
     database: process.env.DB_DATABASE,
     waitForConnections: true,
-    connectionLimit: 100,
-    queueLimit: 0
+    connectionLimit: 200,
+    maxIdle: 100,
+    idleTimeout: 60000,
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0,
+    connectTimeout: 10000
 });
 
 export default db

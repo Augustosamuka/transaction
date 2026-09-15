@@ -6,16 +6,9 @@ const db = new transactionDatabase()
 class transactionServices {
 
     async transactionPost (value) {
-        if (!value) {
-            throw new Error('Value not found')
-        }
+        await db.insetTransaction(value)
 
-        const insetTransaction = await db.insetTransaction(value)
-        if (!insetTransaction) {
-            throw new Error('Error inserting into the database')
-        }
-
-        createLogs({ message: `O usuario transferiu o valor de R$ ${value.toLocaleString('pt-BR')}` }).catch(err => console.log('Falha ao salvara log:', err))
+        createLogs({ message: `O usuario transferiu o valor de R$ ${value}` }).catch(() => {})
     }
 
     async transactionDelete () {
@@ -24,7 +17,7 @@ class transactionServices {
             throw new Error('Error deleting the transactions')
         }
 
-        createLogs({ message: 'O usuario deletou todas as transações' }).catch(err => console.log('Falha ao salvara log:', err))
+        createLogs({ message: 'O usuario deletou todas as transações' }).catch(() => {})
     }
 
     async transactionStatistics () {
@@ -34,7 +27,7 @@ class transactionServices {
         }
 
         if (statisticsTransaction.length <= 0) {
-            createLogs({message: `O usuario consultou as estatísticas e não obteve resultado` }).catch(err => console.log('Falha ao salvara log:', err))
+            createLogs({message: `O usuario consultou as estatísticas e não obteve resultado` }).catch(() => {})
             return {
                 count: '0',
                 sum: '0',
@@ -53,7 +46,7 @@ class transactionServices {
         const min = Math.min(...values)
         const max = Math.max(...values)
 
-        createLogs({ message: `O usuario consultou as estatísticas da suas transações.` }).catch(err => console.log('Falha ao salvara log:', err))
+        createLogs({ message: `O usuario consultou as estatísticas da suas transações.` }).catch(() => {})
 
         return {
             count: count.toLocaleString('pt-BR'),
@@ -70,10 +63,7 @@ export async function createLogs({ message }) {
         return 'Error saving the log'
     }
 
-    const insertLog = await db.createLogs(message)
-    if (!insertLog) {
-        throw new Error('Error saving the log')
-    }
+    await db.createLogs(message)
 }
 
 export default transactionServices

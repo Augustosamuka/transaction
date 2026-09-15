@@ -4,17 +4,9 @@ import db from "../db.connection.js";
 class transactionDatabase {
 
     async insetTransaction (value) {
-        if (!value) {
-            return false
-        }
-
-        const date = new Date()
-
         await db.query(
-            'INSERT INTO transactions (value, date) VALUES(?, ?)', [ value, date ]
+            'INSERT INTO transactions (value) VALUES(?)', [ value ]
         )
-        
-        return true
     }
 
     async deleteTransaction () {
@@ -27,10 +19,7 @@ class transactionDatabase {
             return false
         }
 
-        await db.query(
-            'DELETE FROM transactions'
-        )
-
+        await db.query('DELETE FROM transactions')
         return true
     }
 
@@ -48,12 +37,10 @@ class transactionDatabase {
             return false
         }
 
-        const date = new Date()
-
         await db.query(
-            'INSERT INTO logs (message, date) VALUES(?, ?)', [ message, date ]
+            'INSERT INTO logs (message, date) VALUES(?, NOW())', [ message ]
         )
-        
+
         return true
     }
 }
